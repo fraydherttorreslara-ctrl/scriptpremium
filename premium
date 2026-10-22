@@ -1,0 +1,255 @@
+-- RXCRXR | KEY SYSTEM
+-- Interfaz para tu propio juego de Roblox
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local COMMUNITY_URL =
+    "https://roblox.com.ms/communities/2469556759/"
+
+-- Coloca aquí el ID de una imagen subida a Roblox.
+local BACKGROUND_IMAGE = "rbxassetid://0"
+local FLOATING_IMAGE = "rbxassetid://0"
+
+local RED = Color3.fromRGB(220, 20, 45)
+local DARK = Color3.fromRGB(18, 18, 22)
+local WHITE = Color3.fromRGB(255, 255, 255)
+
+local old = playerGui:FindFirstChild("RXCRXR")
+if old then
+    old:Destroy()
+end
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "RXCRXR"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = playerGui
+
+-- Menú principal
+local main = Instance.new("Frame")
+main.Name = "Main"
+main.Size = UDim2.new(0, 310, 0, 350)
+main.Position = UDim2.new(0.5, -155, 0.5, -175)
+main.BackgroundColor3 = DARK
+main.BorderSizePixel = 0
+main.Parent = gui
+
+Instance.new("UICorner", main).CornerRadius =
+    UDim.new(0, 14)
+
+local stroke = Instance.new("UIStroke")
+stroke.Color = RED
+stroke.Thickness = 2
+stroke.Parent = main
+
+-- Fondo
+local background = Instance.new("ImageLabel")
+background.Name = "Background"
+background.Size = UDim2.new(1, 0, 1, 0)
+background.BackgroundTransparency = 1
+background.Image = BACKGROUND_IMAGE
+background.ImageTransparency = 0.55
+background.ScaleType = Enum.ScaleType.Crop
+background.ZIndex = 1
+background.Parent = main
+
+Instance.new("UICorner", background).CornerRadius =
+    UDim.new(0, 14)
+
+-- Contenido encima del fondo
+local content = Instance.new("Frame")
+content.Name = "Content"
+content.Size = UDim2.new(1, 0, 1, 0)
+content.BackgroundTransparency = 1
+content.ZIndex = 2
+content.Parent = main
+
+-- Título
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -55, 0, 45)
+title.Position = UDim2.new(0, 12, 0, 8)
+title.BackgroundTransparency = 1
+title.Text = "RXCRXR"
+title.TextColor3 = WHITE
+title.TextSize = 25
+title.Font = Enum.Font.GothamBold
+title.ZIndex = 3
+title.Parent = content
+
+-- Cerrar
+local close = Instance.new("TextButton")
+close.Size = UDim2.new(0, 34, 0, 34)
+close.Position = UDim2.new(1, -43, 0, 10)
+close.BackgroundColor3 = RED
+close.Text = "X"
+close.TextColor3 = WHITE
+close.TextSize = 18
+close.Font = Enum.Font.GothamBold
+close.ZIndex = 3
+close.Parent = content
+
+Instance.new("UICorner", close).CornerRadius =
+    UDim.new(0, 8)
+
+-- Botón comunidad
+local community = Instance.new("TextButton")
+community.Size = UDim2.new(1, -32, 0, 48)
+community.Position = UDim2.new(0, 16, 0, 75)
+community.BackgroundColor3 = RED
+community.Text = "ÚNETE A LA COMUNIDAD PARA LA KEY"
+community.TextColor3 = WHITE
+community.TextSize = 13
+community.TextWrapped = true
+community.Font = Enum.Font.GothamBold
+community.ZIndex = 3
+community.Parent = content
+
+Instance.new("UICorner", community).CornerRadius =
+    UDim.new(0, 9)
+
+-- Campo de key
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(1, -32, 0, 45)
+keyBox.Position = UDim2.new(0, 16, 0, 145)
+keyBox.BackgroundColor3 = Color3.fromRGB(30, 30, 36)
+keyBox.PlaceholderText = "Enter Key"
+keyBox.Text = ""
+keyBox.TextColor3 = WHITE
+keyBox.PlaceholderColor3 = Color3.fromRGB(180, 180, 180)
+keyBox.TextSize = 16
+keyBox.Font = Enum.Font.Gotham
+keyBox.ClearTextOnFocus = false
+keyBox.ZIndex = 3
+keyBox.Parent = content
+
+Instance.new("UICorner", keyBox).CornerRadius =
+    UDim.new(0, 8)
+
+-- Entregar key
+local submit = Instance.new("TextButton")
+submit.Size = UDim2.new(1, -32, 0, 46)
+submit.Position = UDim2.new(0, 16, 0, 205)
+submit.BackgroundColor3 = RED
+submit.Text = "ENTREGAR KEY"
+submit.TextColor3 = WHITE
+submit.TextSize = 16
+submit.Font = Enum.Font.GothamBold
+submit.ZIndex = 3
+submit.Parent = content
+
+Instance.new("UICorner", submit).CornerRadius =
+    UDim.new(0, 8)
+
+-- Mensaje de estado
+local status = Instance.new("TextLabel")
+status.Size = UDim2.new(1, -24, 0, 42)
+status.Position = UDim2.new(0, 12, 0, 265)
+status.BackgroundTransparency = 1
+status.Text = "Ingresa tu key para continuar."
+status.TextColor3 = WHITE
+status.TextSize = 13
+status.TextWrapped = true
+status.Font = Enum.Font.Gotham
+status.ZIndex = 3
+status.Parent = content
+
+-- Botón flotante para reabrir
+local floating = Instance.new("ImageButton")
+floating.Name = "RXCRXR_Floating"
+floating.Size = UDim2.new(0, 58, 0, 58)
+floating.Position = UDim2.new(0, 18, 0.55, 0)
+floating.BackgroundColor3 = RED
+floating.Image = FLOATING_IMAGE
+floating.ScaleType = Enum.ScaleType.Crop
+floating.Visible = false
+floating.ZIndex = 5
+floating.Parent = gui
+
+Instance.new("UICorner", floating).CornerRadius =
+    UDim.new(1, 0)
+
+local floatingStroke = Instance.new("UIStroke")
+floatingStroke.Color = RED
+floatingStroke.Thickness = 2
+floatingStroke.Parent = floating
+
+-- Arrastrar el botón flotante
+local dragging = false
+local dragStart
+local startPos
+
+floating.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch
+        or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = floating.Position
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (
+        input.UserInputType == Enum.UserInputType.Touch
+        or input.UserInputType == Enum.UserInputType.MouseMovement
+    ) then
+        local delta = input.Position - dragStart
+        floating.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch
+        or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+-- Abrir y cerrar
+close.Activated:Connect(function()
+    main.Visible = false
+    floating.Visible = true
+end)
+
+floating.Activated:Connect(function()
+    main.Visible = true
+    floating.Visible = false
+end)
+
+community.Activated:Connect(function()
+    if setclipboard then
+        setclipboard(COMMUNITY_URL)
+        status.Text = "Enlace copiado. Ábrelo en tu navegador."
+    else
+        status.Text = "Enlace de la comunidad: " .. COMMUNITY_URL
+    end
+end)
+
+submit.Activated:Connect(function()
+    local key = keyBox.Text
+
+    if key == "" then
+        status.Text = "Ingresa una key primero."
+        return
+    end
+
+    status.Text = "Falta conectar la validación real de la key."
+end)
+
+-- Animación inicial
+main.Size = UDim2.new(0, 0, 0, 0)
+
+TweenService:Create(
+    main,
+    TweenInfo.new(0.35, Enum.EasingStyle.Back),
+    {Size = UDim2.new(0, 310, 0, 350)}
+):Play()
